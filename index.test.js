@@ -13,9 +13,23 @@ test("Arrays should be equal", () => {
     expect(areArraysEqual(exampleArray1, exampleArray2)).toBe(true)
 })
 
-test("Should Expand", () => {
+describe("Should Expand", () => {
     let exampleState = new Node([[1, 5, 7], [2, 'O', 6], [3, 4, 8]])
-    let exampleStateT = new Node([[1, 'O', 7], [2, 5, 6], [3, 4, 8]])
-    expand(exampleState)
-    expect(compare(exampleState["T"], exampleStateT)).toBe(true)
+    test("Should expand to top", () => {
+        let exampleStateT = new Node([[1, 'O', 7], [2, 5, 6], [3, 4, 8]])
+        expand(exampleState)
+        expect(compare(exampleState["T"], exampleStateT)).toBe(true)
+    })
+    test("Should expand to bottom", () => {
+        let exampleStateB = new Node([[1, 5, 7], [2, 4, 6], [3, 'O', 8]])
+        expect(compare(exampleState["B"], exampleStateB)).toBe(true)
+    })
+    test("Should expand to left", () => {
+        let exampleStateL = new Node([[1, 5, 7], ['O', 2, 6], [3, 4, 8]])
+        expect(compare(exampleState["L"], exampleStateL)).toBe(true)
+    })
+    test("Should expand to right", () => {
+        let exampleStateR = new Node([[1, 5, 7], [2, 6, 'O'], [3, 4, 8]])
+        expect(compare(exampleState["R"], exampleStateR)).toBe(true)
+    })
 })
