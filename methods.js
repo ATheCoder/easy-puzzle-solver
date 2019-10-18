@@ -67,7 +67,12 @@ const compare = (node1, node2) => {
     data1 = node1.data
     data2 = node2.data
     return data1.every((row, index) => {
-        return areArraysEqual(row, data2[index])
+        try{
+            return areArraysEqual(row, data2[index])
+
+        }catch(e){
+            return false
+        }
     })
 }
 
@@ -77,4 +82,13 @@ const cloneArray = (array) => {
     })
 }
 
-module.exports = {expand, compare, findEmptySquareCoordinates, areArraysEqual}
+const isNodeInArray = (array, node) => {
+    for(let nodeOfArray of array){
+        if(compare(nodeOfArray, node) === true){
+            return true
+        }
+    }
+    return false
+}
+
+module.exports = {expand, compare, findEmptySquareCoordinates, areArraysEqual, isNodeInArray}

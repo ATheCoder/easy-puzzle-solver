@@ -1,5 +1,5 @@
 const Node = require('./node')
-const { expand, compare, findEmptySquareCoordinates, areArraysEqual } = require('./methods')
+const { expand, compare, findEmptySquareCoordinates, areArraysEqual, isNodeInArray } = require('./methods')
 test("should find empty coordinates", () => {
     let exampleNode = new Node([[1, 2, 3], [4, 5, 6], [7, 8, 'O']])
     const [i, j] = findEmptySquareCoordinates(exampleNode)
@@ -11,6 +11,13 @@ test("Arrays should be equal", () => {
     let exampleArray1 = [1, 2, 'O']
     let exampleArray2 = [1, 2, 'O']
     expect(areArraysEqual(exampleArray1, exampleArray2)).toBe(true)
+})
+
+test("Node is in an Array of Nodes", () => {
+    let array = [new Node([[1, 2, 3], [4, 5, 6], [7, 8, 'O']]), new Node([[1, 5, 7], [2, 'O', 6], [3, 4, 8]])]
+    let node = new Node([[1, 2, 3], [4, 5, 6], [7, 8, 'O']])
+    expect(isNodeInArray(array, node)).toBe(true)
+    expect(isNodeInArray(array, new Node([[1, 'O', 7], [2, 5, 6], [3, 4, 8]]))).toBe(false)
 })
 
 describe("Expand Function", () => {

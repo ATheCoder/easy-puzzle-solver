@@ -1,9 +1,9 @@
-const { expand, compare } = require('./methods')
+const { expand, compare, isNodeInArray } = require('./methods')
 const Node = require('./node')
 module.exports = (element) => {
     let goal = new Node([[1, 2, 3], [4, 5, 6], [7, 8, 'O']])
     let frontier = [element]
-    let alreadyVisited = []
+    let alreadyVisitedHashTable = {}
     while(frontier.length > 0){
         let leafNode = frontier[0]
         if(leafNode.data === null){
@@ -15,11 +15,23 @@ module.exports = (element) => {
             return getPath(leafNode)
         }
         expand(leafNode)
-        alreadyVisited.push(leafNode)
-        frontier.push(leafNode.T)
-        frontier.push(leafNode.B)
-        frontier.push(leafNode.R)
-        frontier.push(leafNode.L)
+        alreadyVisitedHashTable[JSON.stringify(leafNode.data)] = true
+        if(!alreadyVisitedHashTable[JSON.stringify(leafNode.T.data)]){
+            alreadyVisitedHashTable[JSON.stringify(leafNode.T.data)] = true
+            frontier.push(leafNode.T)
+        }
+        if(!alreadyVisitedHashTable[JSON.stringify(leafNode.B.data)]){
+            alreadyVisitedHashTable[JSON.stringify(leafNode.B.data)] = true
+            frontier.push(leafNode.B)
+        }
+        if(!alreadyVisitedHashTable[JSON.stringify(leafNode.R.data)]){
+            alreadyVisitedHashTable[JSON.stringify(leafNode.R.data)] = true
+            frontier.push(leafNode.R)
+        }
+        if(!alreadyVisitedHashTable[JSON.stringify(leafNode.L.data)]){
+            alreadyVisitedHashTable[JSON.stringify(leafNode.L.data)] = true
+            frontier.push(leafNode.L)
+        }
     }
     return "fail"
 }
@@ -34,5 +46,5 @@ const getPath = (node) => {
         result += currentNode.parentDir
         currentNode = currentNode.parent
     }
-    return result
+    return result.split("").reverse().join("");
 }
