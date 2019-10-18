@@ -11,18 +11,30 @@ const expandDir = (direction, node) => {
     let data = cloneArray(node.data)
     switch(direction) {
         case 'T':
+            if(i-1 < 0){
+                return null
+            }
             data[i][j] = data[i-1][j]
             data[i-1][j] = 'O'
             return data
         case 'B':
+            if(i+1 >= data.length){
+                return null
+            }
             data[i][j] = data[i+1][j]
             data[i+1][j] = 'O'
             return data
         case 'L':
+            if(j-1 < 0){
+                return null
+            }
             data[i][j] = data[i][j-1]
             data[i][j-1] = 'O'
             return data
         case 'R':
+            if(j+1 >= data[i].length){
+                return null
+            }
             data[i][j] = data[i][j+1]
             data[i][j+1] = 'O'
             return data
@@ -49,10 +61,11 @@ const areArraysEqual = (array1, array2) => {
 }
 
 const compare = (node1, node2) => {
+    if(node1.data === node2){
+        return true
+    }
     data1 = node1.data
     data2 = node2.data
-    // console.log("data1: ", data1)
-    // console.log("data2: ", data2)
     return data1.every((row, index) => {
         return areArraysEqual(row, data2[index])
     })

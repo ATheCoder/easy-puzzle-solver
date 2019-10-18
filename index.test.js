@@ -13,7 +13,7 @@ test("Arrays should be equal", () => {
     expect(areArraysEqual(exampleArray1, exampleArray2)).toBe(true)
 })
 
-describe("Should Expand", () => {
+describe("Expand Function", () => {
     let exampleState = new Node([[1, 5, 7], [2, 'O', 6], [3, 4, 8]])
     test("Should expand to top", () => {
         let exampleStateT = new Node([[1, 'O', 7], [2, 5, 6], [3, 4, 8]])
@@ -31,5 +31,28 @@ describe("Should Expand", () => {
     test("Should expand to right", () => {
         let exampleStateR = new Node([[1, 5, 7], [2, 6, 'O'], [3, 4, 8]])
         expect(compare(exampleState["R"], exampleStateR)).toBe(true)
+    })
+})
+
+describe("Edge Cases", () => {
+    test("edge case right", () => {
+        exampleNode = new Node([[1, 5, 7], [2, 6, 'O'], [3, 4, 8]])
+        expand(exampleNode)
+        expect(compare(exampleNode.R, null)).toBe(true)
+    })
+    test("edge case left", () => {
+        exampleNode = new Node([[1, 5, 7], ['O', 6, 2], [3, 4, 8]])
+        expand(exampleNode)
+        expect(compare(exampleNode.L, null)).toBe(true)
+    })
+    test("edge case top", () => {
+        exampleNode = new Node([[1, 'O', 7], [5, 6, 2], [3, 4, 8]])
+        expand(exampleNode)
+        expect(compare(exampleNode.T, null)).toBe(true)
+    })
+    test("edge case bottom", () => {
+        exampleNode = new Node([[1, 4, 7], [5, 6, 2], [3, 'O', 8]])
+        expand(exampleNode)
+        expect(compare(exampleNode.B, null)).toBe(true)
     })
 })

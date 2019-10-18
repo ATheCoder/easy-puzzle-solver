@@ -1,5 +1,9 @@
 module.exports = class Node {
     constructor(data) {
+        if(data === null){
+            this.data = null
+            return
+        }
         if(!data.length || !data.every((row) => {
             return row.length
         })){
