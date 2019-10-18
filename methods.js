@@ -1,9 +1,9 @@
 const Node = require('./node')
 const expand = (node) => {
-    node["T"] = new Node(expandDir('T', node))
-    node["B"] = new Node(expandDir('B', node))
-    node["L"] = new Node(expandDir('L', node))
-    node["R"] = new Node(expandDir('R', node))
+    node["T"] = new Node(expandDir('T', node), node, 'T')
+    node["B"] = new Node(expandDir('B', node), node, 'B')
+    node["L"] = new Node(expandDir('L', node), node, 'L')
+    node["R"] = new Node(expandDir('R', node), node, 'R')
 }
 
 const expandDir = (direction, node) => {
