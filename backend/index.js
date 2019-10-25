@@ -1,6 +1,6 @@
 const Node = require("./node")
 const traverseTree = require('./traverseTree')
-let beginning = new Node([[1, 8, 2], ['O', 4, 3], [7, 6, 5]])
+let beginning = new Node([[1, 3, 5], [2, 'O', 7], [4, 8, 6]])
 let result = traverseTree(beginning)
 console.log("Found result: ", result)
 

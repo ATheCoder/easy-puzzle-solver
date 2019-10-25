@@ -6,8 +6,8 @@ class Board extends React.Component {
         return (
             <div style={style.container}>
                 {
-                    this.props.layout.map((row) => {
-                        return <Row elements={row} />
+                    this.props.layout.map((row, index) => {
+                        return <Row key={index} elements={row} reverseColor={index % 2 == 0} />
                     })
                 }
             </div>
@@ -17,16 +17,15 @@ class Board extends React.Component {
 
 const style = {
     container: {
-        border: 'solid',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: "100px",
+        border: "solid",
+        maxWidth: "90px",
         borderRadius: "5px",
         color: "white",
-        backgroundColor: "grey",
-        borderColor: "black"
+        borderColor: "black",
     }
 }
 
