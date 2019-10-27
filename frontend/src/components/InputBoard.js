@@ -1,27 +1,48 @@
 import React from "react"
+import Node from "../backend/node"
+import calcWorker from "./calcWorker"
+import WebWorker from "./workerSetup"
 
 class InputBoard extends React.Component {
     constructor(props){
         super(props)
-        this.state = { currentLayout: [[1, 2, 3], [4, 5, 6], [7, 8, 'O']], isEmptySelected: false, emptyCoordinates: {i: 2, j: 2} }
+        this.state = { currentLayout: [[1, 2, 3], [4, 5, 6], [7, 8, 'O']], isEmptySelected: false, emptyCoordinates: {i: 2, j: 2}, result: "" }
+    }
+
+    componentDidMount() {
+        this.worker = new WebWorker(calcWorker)
+        this.worker.addEventListener("message", e => {
+            console.log("Got your message, worker!")
+            console.log(e.data)
+        })
     }
 
     render() {
         return (
-            <div style = {style.container}>
-                {
-                    this.state.currentLayout.map((row, rowIndex) => {
-                        return <div style={style.row}>
-                            {
-                                row.map((element, elementIndex) => {
-                                    let emptyBoxStyle = this.state.isEmptySelected ? {...style.element, ...style.selectedEmpty} : {...style.element}
-                                    if(element === 'O') return <div style={emptyBoxStyle} />
-                                    return <div onClick={() => {this.onSelect(rowIndex, elementIndex)}} style={{...style.element, backgroundColor: element % 2 === 0 ? 'grey' : 'red'}}>{element}</div>
-                                })
-                            }
-                        </div>
-                    })
-                }
+            <div>
+                <div style = {style.container}>
+                    {
+                        this.state.currentLayout.map((row, rowIndex) => {
+                            return <div style={style.row}>
+                                {
+                                    row.map((element, elementIndex) => {
+                                        let emptyBoxStyle = this.state.isEmptySelected ? {...style.element, ...style.selectedEmpty} : {...style.element}
+                                        if(element === 'O') return <div style={emptyBoxStyle} />
+                                        return <div onClick={() => {this.onSelect(rowIndex, elementIndex)}} style={{...style.element, backgroundColor: element % 2 === 0 ? 'grey' : 'red'}}>{element}</div>
+                                    })
+                                }
+                            </div>
+                        })
+                    }
+                </div>
+                <div style={style.textContainer}>
+                    {
+                        this.state.result !== "" && "Result: " + this.state.result
+                    }
+                </div>
+                <button onClick={this.calculateResult}>
+                    Calculate Result
+                </button>
             </div>
         )
     }
@@ -40,6 +61,13 @@ class InputBoard extends React.Component {
             newLayout[rowIndex][elementIndex] = 'O'
             this.setState({currentLayout: newLayout, emptyCoordinates: {i: rowIndex, j: elementIndex}})
         }
+    }
+
+    calculateResult = () => {
+        console.log("hi ", this.worker)
+        this.worker.postMessage(this.state.currentLayout)
+        // let result = await calculateTree(new Node(this.state.currentLayout))
+        // this.setState({result})
     }
 }
 
@@ -68,6 +96,12 @@ const style = {
         paddingRight: 0,
         paddingBottom: 0,
         borderRadius: "3px"
+    },
+    textContainer: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center"
     }
 }
 

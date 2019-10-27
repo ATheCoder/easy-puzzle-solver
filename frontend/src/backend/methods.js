@@ -1,12 +1,12 @@
 const Node = require('./node')
-const expand = (node) => {
+export const expand = (node) => {
     node["T"] = new Node(expandDir('T', node), node, 'T')
     node["B"] = new Node(expandDir('B', node), node, 'B')
     node["L"] = new Node(expandDir('L', node), node, 'L')
     node["R"] = new Node(expandDir('R', node), node, 'R')
 }
 
-const expandDir = (direction, node) => {
+export const expandDir = (direction, node) => {
     let [i, j] = findEmptySquareCoordinates(node)
     let data = cloneArray(node.data)
     switch(direction) {
@@ -43,7 +43,7 @@ const expandDir = (direction, node) => {
     }
 }
 
-const findEmptySquareCoordinates = (node) => {
+export const findEmptySquareCoordinates = (node) => {
     let data = node.data
     for(let i = 0;i<data.length;i++) {
         for(let j = 0;j<data.length;j++) {
@@ -54,18 +54,18 @@ const findEmptySquareCoordinates = (node) => {
     }
 }
 
-const areArraysEqual = (array1, array2) => {
+export const areArraysEqual = (array1, array2) => {
     return array1.length === array2.length && array1.every((value, index) => {
         return value === array2[index]
     })
 }
 
-const compare = (node1, node2) => {
+export const compare = (node1, node2) => {
     if(node1.data === node2){
         return true
     }
-    data1 = node1.data
-    data2 = node2.data
+    let data1 = node1.data
+    let data2 = node2.data
     return data1.every((row, index) => {
         try{
             return areArraysEqual(row, data2[index])
@@ -76,13 +76,13 @@ const compare = (node1, node2) => {
     })
 }
 
-const cloneArray = (array) => {
+export const cloneArray = (array) => {
     return array.map((element) => {
         return element.slice()
     })
 }
 
-const isNodeInArray = (array, node) => {
+export const isNodeInArray = (array, node) => {
     for(let nodeOfArray of array){
         if(compare(nodeOfArray, node) === true){
             return true
@@ -91,4 +91,4 @@ const isNodeInArray = (array, node) => {
     return false
 }
 
-module.exports = {expand, compare, findEmptySquareCoordinates, areArraysEqual, isNodeInArray}
+// module.exports = {expand, compare, findEmptySquareCoordinates, areArraysEqual, isNodeInArray}
