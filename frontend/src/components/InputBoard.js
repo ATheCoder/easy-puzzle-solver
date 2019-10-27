@@ -1,6 +1,7 @@
 import React from "react"
 import Node from "../backend/node"
 import Worker from "./calcWorker.worker"
+import Loader from 'react-loader-spinner'
 
 class InputBoard extends React.Component {
     constructor(props){
@@ -34,19 +35,19 @@ class InputBoard extends React.Component {
                         })
                     }
                 </div>
-                <div style={style.textContainer}>
+                <div style={style.center}>
                     {
-                        this.state.calculatingResult && "Calculating Result ..."
+                        this.state.calculatingResult && <Loader type="Triangle" color="#ffffff" height={76} width={80} />
                     }
                 </div>
                 <div style={style.textContainer}>
                     {
-                        this.state.result !== "" && !this.state.calculatingResult && "Result: " + this.state.result
+                        this.state.result !== "" && !this.state.calculatingResult && this.state.result
                     }
                 </div>
                 <div style={style.textContainer}>
                     {
-                        this.state.timeElapsed !== 0 && !this.state.calculatingResult && "Time Elapsed: " + this.state.timeElapsed + "ms"
+                        this.state.timeElapsed !== 0 && !this.state.calculatingResult && this.state.timeElapsed + "ms"
                     }
                 </div>
             </div>
@@ -100,9 +101,10 @@ const style = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '20px',
-        height: '20px',
+        width: '50px',
+        height: '50px',
         padding: '5px',
+        fontSize: '30px',
         textAlign: 'center',
         color: 'white'
     },
@@ -118,7 +120,15 @@ const style = {
         alignItems: "center",
         justifyContent: "center",
         textAlign: "center",
-        color: "white"
+        color: "white",
+        fontSize: "30px"
+    },
+    center: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        color: "white",
     }
 }
 
