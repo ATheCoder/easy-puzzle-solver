@@ -27,7 +27,7 @@ class InputBoard extends React.Component {
                                     row.map((element, elementIndex) => {
                                         let emptyBoxStyle = this.state.isEmptySelected ? {...style.element, ...style.selectedEmpty} : {...style.element}
                                         if(element === 'O') return <div style={emptyBoxStyle} />
-                                        return <div onClick={() => {this.onSelect(rowIndex, elementIndex)}} style={{...style.element, backgroundColor: element % 2 === 0 ? 'grey' : 'red'}}>{element}</div>
+                                        return <div onClick={() => {this.onSelect(rowIndex, elementIndex)}} style={{...style.element, backgroundColor: element % 2 === 0 ? '#39ff14' : '#ff073a'}}>{element}</div>
                                     })
                                 }
                             </div>
@@ -49,9 +49,6 @@ class InputBoard extends React.Component {
                         this.state.timeElapsed !== 0 && !this.state.calculatingResult && "Time Elapsed: " + this.state.timeElapsed + "ms"
                     }
                 </div>
-                <button onClick={this.calculateResult}>
-                    Calculate Result
-                </button>
             </div>
         )
     }
@@ -68,11 +65,12 @@ class InputBoard extends React.Component {
             let newLayout = this.state.currentLayout
             newLayout[emptyCoordinates.i][emptyCoordinates.j] = newLayout[rowIndex][elementIndex]
             newLayout[rowIndex][elementIndex] = 'O'
+            this.calculateResult(newLayout)
             this.setState({currentLayout: newLayout, emptyCoordinates: {i: rowIndex, j: elementIndex}})
         }
     }
 
-    calculateResult = () => {
+    calculateResult = (layout) => {
         this.setState({calculatingResult: true})
         this.worker.terminate()
         this.worker = new Worker()
@@ -81,7 +79,7 @@ class InputBoard extends React.Component {
             this.setState({ result, timeElapsed })
             this.setState({calculatingResult: false})
         })
-        this.worker.postMessage(this.state.currentLayout)
+        this.worker.postMessage(layout)
         // let result = await calculateTree(new Node(this.state.currentLayout))
         // this.setState({result})
     }
@@ -94,7 +92,9 @@ const style = {
     },
     row: {
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     element: {
         display: 'flex',
@@ -117,7 +117,8 @@ const style = {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        textAlign: "center"
+        textAlign: "center",
+        color: "white"
     }
 }
 
