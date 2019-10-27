@@ -7,7 +7,7 @@ class Board extends React.Component {
             <div style={style.container}>
                 {
                     this.props.layout.map((row, index) => {
-                        return <Row key={index} elements={row} reverseColor={index % 2 == 0} />
+                        return <Row key={index} elements={row} reverseColor={index % 2 === 0} />
                     })
                 }
             </div>

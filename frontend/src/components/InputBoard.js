@@ -1,19 +1,18 @@
 import React from "react"
 import Node from "../backend/node"
-import calcWorker from "./calcWorker"
-import WebWorker from "./workerSetup"
+import Worker from "./calcWorker.worker"
 
 class InputBoard extends React.Component {
     constructor(props){
         super(props)
-        this.state = { currentLayout: [[1, 2, 3], [4, 5, 6], [7, 8, 'O']], isEmptySelected: false, emptyCoordinates: {i: 2, j: 2}, result: "" }
+        this.state = { currentLayout: [[1, 2, 3], [4, 5, 6], [7, 8, 'O']], isEmptySelected: false, emptyCoordinates: {i: 2, j: 2}, result: "", timeElapsed: 0, calculatingResult: false }
     }
 
     componentDidMount() {
-        this.worker = new WebWorker(calcWorker)
+        this.worker = new Worker()
         this.worker.addEventListener("message", e => {
-            console.log("Got your message, worker!")
-            console.log(e.data)
+            let { result, timeElapsed } = e.data
+            this.setState({ result, timeElapsed })
         })
     }
 
@@ -37,7 +36,17 @@ class InputBoard extends React.Component {
                 </div>
                 <div style={style.textContainer}>
                     {
-                        this.state.result !== "" && "Result: " + this.state.result
+                        this.state.calculatingResult && "Calculating Result ..."
+                    }
+                </div>
+                <div style={style.textContainer}>
+                    {
+                        this.state.result !== "" && !this.state.calculatingResult && "Result: " + this.state.result
+                    }
+                </div>
+                <div style={style.textContainer}>
+                    {
+                        this.state.timeElapsed !== 0 && !this.state.calculatingResult && "Time Elapsed: " + this.state.timeElapsed + "ms"
                     }
                 </div>
                 <button onClick={this.calculateResult}>
@@ -64,7 +73,14 @@ class InputBoard extends React.Component {
     }
 
     calculateResult = () => {
-        console.log("hi ", this.worker)
+        this.setState({calculatingResult: true})
+        this.worker.terminate()
+        this.worker = new Worker()
+        this.worker.addEventListener("message", e => {
+            let { result, timeElapsed } = e.data
+            this.setState({ result, timeElapsed })
+            this.setState({calculatingResult: false})
+        })
         this.worker.postMessage(this.state.currentLayout)
         // let result = await calculateTree(new Node(this.state.currentLayout))
         // this.setState({result})
