@@ -75,7 +75,6 @@ class InputBoard extends React.Component {
                 this.setState({currentIndex: this.state.currentIndex + 1})
             }
             else if(this.state.currentIndex > 0 && currentDir === this.getNegativeOfDir(this.state.result[this.state.currentIndex - 1])){
-                console.log("Boom Bada Boom")
                 this.setState({currentIndex: this.state.currentIndex - 1})
             }
             else {
@@ -95,8 +94,6 @@ class InputBoard extends React.Component {
             this.setState({calculatingResult: false, currentIndex: 0})
         })
         this.worker.postMessage(layout)
-        // let result = await calculateTree(new Node(this.state.currentLayout))
-        // this.setState({result})
     }
 
     convertToDir = (emptyCoordinates, elementCoordinates) => {
