@@ -1,6 +1,6 @@
 import React from "react"
 import Node from "../backend/node"
-import Worker from "worker-loader!./calcWorker.worker"
+import Worker from "./calcWorker.worker"
 import Loader from 'react-loader-spinner'
 
 class InputBoard extends React.Component {
@@ -86,7 +86,9 @@ class InputBoard extends React.Component {
 
     calculateResult = (layout) => {
         this.setState({calculatingResult: true})
-        if(this.worker) this.worker.terminate()
+        if(!!this.worker){
+            this.worker.terminate()
+        }
         this.worker = new Worker()
         this.worker.addEventListener("message", e => {
             let { result, timeElapsed } = e.data
