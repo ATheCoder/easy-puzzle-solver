@@ -6,7 +6,7 @@ import Loader from 'react-loader-spinner'
 class InputBoard extends React.Component {
     constructor(props){
         super(props)
-        this.state = { currentLayout: [[1, 2, 3], [4, 5, 6], [7, 8, 'O']], isEmptySelected: false, emptyCoordinates: {i: 2, j: 2}, result: "", timeElapsed: 0, calculatingResult: false }
+        this.state = { currentLayout: [[1, 2, 3], [4, 5, 6], [7, 8, 'O']], isEmptySelected: false, emptyCoordinates: {i: 2, j: 2}, result: "", timeElapsed: 0, calculatingResult: false, currentIndex: 0 }
     }
 
     componentDidMount() {
@@ -42,7 +42,11 @@ class InputBoard extends React.Component {
                 </div>
                 <div style={style.textContainer}>
                     {
-                        this.state.result !== "" && !this.state.calculatingResult && this.state.result
+                        this.state.result !== "" && !this.state.calculatingResult && <div>
+                            <span style={{color: '#2b0000'}}>{this.state.result.substr(0, this.state.currentIndex)}</span>
+                            <span style={{color: '#39ff14'}}>{this.state.result[this.state.currentIndex]}</span>
+                            <span>{this.state.result.substr(this.state.currentIndex + 1)}</span>
+                        </div>
                     }
                 </div>
                 <div style={style.textContainer}>
@@ -66,7 +70,17 @@ class InputBoard extends React.Component {
             let newLayout = this.state.currentLayout
             newLayout[emptyCoordinates.i][emptyCoordinates.j] = newLayout[rowIndex][elementIndex]
             newLayout[rowIndex][elementIndex] = 'O'
-            this.calculateResult(newLayout)
+            let currentDir = this.convertToDir(emptyCoordinates, {i: rowIndex, j: elementIndex})
+            if(currentDir === this.state.result[this.state.currentIndex]) {
+                this.setState({currentIndex: this.state.currentIndex + 1})
+            }
+            else if(this.state.currentIndex > 0 && currentDir === this.getNegativeOfDir(this.state.result[this.state.currentIndex - 1])){
+                console.log("Boom Bada Boom")
+                this.setState({currentIndex: this.state.currentIndex - 1})
+            }
+            else {
+                this.calculateResult(newLayout)
+            }
             this.setState({currentLayout: newLayout, emptyCoordinates: {i: rowIndex, j: elementIndex}})
         }
     }
@@ -78,11 +92,32 @@ class InputBoard extends React.Component {
         this.worker.addEventListener("message", e => {
             let { result, timeElapsed } = e.data
             this.setState({ result, timeElapsed })
-            this.setState({calculatingResult: false})
+            this.setState({calculatingResult: false, currentIndex: 0})
         })
         this.worker.postMessage(layout)
         // let result = await calculateTree(new Node(this.state.currentLayout))
         // this.setState({result})
+    }
+
+    convertToDir = (emptyCoordinates, elementCoordinates) => {
+        let isT = emptyCoordinates.j === elementCoordinates.j && elementCoordinates.i + 1 === emptyCoordinates.i
+        let isB = emptyCoordinates.j === elementCoordinates.j && elementCoordinates.i - 1 === emptyCoordinates.i
+        let isR = emptyCoordinates.i === elementCoordinates.i && elementCoordinates.j - 1 === emptyCoordinates.j
+        let isL = emptyCoordinates.i === elementCoordinates.i && elementCoordinates.j + 1 === emptyCoordinates.j
+
+        if(isT) return "T";
+        if(isB) return "B";
+        if(isR) return "R";
+        if(isL) return "L";
+        throw new Error("This move is not allowed.")
+    }
+
+    getNegativeOfDir = (dir) => {
+        if(dir === "T") return "B"
+        if(dir === "L") return "R"
+        if(dir === "R") return "L"
+        if(dir === "B") return "T"
+        throw new Error("Unknown dir: ", dir)
     }
 }
 
