@@ -1,10 +1,11 @@
 {
-  "name": "frontend",
+  "name": "easy-puzzle-solver",
   "version": "0.1.0",
   "private": true,
   "homepage": "http://8puzzle.athecoder.com",
   "dependencies": {
     "@babel/core": "7.6.0",
+    "@babel/plugin-syntax-jsx": "^7.2.0",
     "@svgr/webpack": "4.3.2",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "@typescript-eslint/parser": "^2.2.0",
@@ -135,6 +136,7 @@
     ]
   },
   "devDependencies": {
+    "webpack-cli": "^3.3.9",
     "worker-loader": "^2.0.0"
   }
 }

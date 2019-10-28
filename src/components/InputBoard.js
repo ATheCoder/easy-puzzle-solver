@@ -1,6 +1,6 @@
 import React from "react"
 import Node from "../backend/node"
-import Worker from "./calcWorker.worker"
+import Worker from "worker-loader!./calcWorker.worker"
 import Loader from 'react-loader-spinner'
 
 class InputBoard extends React.Component {
