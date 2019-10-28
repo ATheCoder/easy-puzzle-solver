@@ -6,15 +6,15 @@ import Loader from 'react-loader-spinner'
 class InputBoard extends React.Component {
     constructor(props){
         super(props)
-        this.state = { currentLayout: [[1, 2, 3], [4, 5, 6], [7, 8, 'O']], isEmptySelected: false, emptyCoordinates: {i: 2, j: 2}, result: "", timeElapsed: 0, calculatingResult: false, currentIndex: 0 }
-    }
-
-    componentDidMount() {
-        this.worker = new Worker()
-        this.worker.addEventListener("message", e => {
-            let { result, timeElapsed } = e.data
-            this.setState({ result, timeElapsed })
-        })
+        this.state = {
+            currentLayout: [[1, 2, 3], [4, 5, 6], [7, 8, 'O']],
+            isEmptySelected: false,
+            emptyCoordinates: {i: 2, j: 2},
+            result: "",
+            timeElapsed: 0,
+            calculatingResult: false,
+            currentIndex: 0
+        }
     }
 
     render() {
@@ -86,7 +86,7 @@ class InputBoard extends React.Component {
 
     calculateResult = (layout) => {
         this.setState({calculatingResult: true})
-        this.worker.terminate()
+        if(this.worker) this.worker.terminate()
         this.worker = new Worker()
         this.worker.addEventListener("message", e => {
             let { result, timeElapsed } = e.data
